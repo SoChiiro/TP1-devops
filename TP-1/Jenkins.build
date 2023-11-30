@@ -7,11 +7,6 @@ pipeline {
   }
 
   stages {
-    stage('Cloning Git') {
-      steps {
-        git branch: 'main' credentialsId: 'SoChiiro', url: 'https://github.com/SoChiiro/TP1-devops'
-      }
-    }
     stage('Building backend image') {
       steps {
         script {
