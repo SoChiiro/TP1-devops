@@ -2,35 +2,35 @@ pipeline {
     agent any
 
     environment {
-      DOCKERHUB_CREDENTIALS = credentials('docker')
+      DOCKERHUB_CREDENTIALS = credentials('ab52a962-60e1-493d-b0ac-8e909378f046')
     }
 
     stages {
       stage('Building backend image') {
         steps {
           script {
-              sh "docker build -t sochiiro/backend-mariotte:1999 ./TP-1/backend/"
+              sh "docker build -t efrei2023/backend-mariotte:1999 ./TP-1/backend/"
           }
         }
       }
       stage('Building frontend image') {
         steps {
           script {
-              sh "docker build -t sochiiro/frontend-mariotte:1999 ./TP-1/frontend/"
+              sh "docker build -t efrei2023/frontend-mariotte:1999 ./TP-1/frontend/"
           }
         }
       }
       stage('Pushing backend image') {
         steps {
           script {
-            sh "docker push sochiiro/backend-mariotte:1999"
+            sh "docker push efrei2023/backend-mariotte:1999"
           }
         }
       }
       stage('Pushing frontend image') {
         steps {
           script {
-            sh "docker push sochiiro/frontend-mariotte:1999"
+            sh "docker push efrei2023/frontend-mariotte:1999"
           }
         }
       }
