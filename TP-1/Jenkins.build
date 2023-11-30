@@ -18,7 +18,7 @@ pipeline {
     stage('Publish backend Image') {
       steps {
         script {
-          withDockerRegistry(credentialsId: 'efrei2023-token') {
+          withDockerRegistry(credentialsId: 'ab52a962-60e1-493d-b0ac-8e909378f046') {
             backendImage.push()
           }
 
@@ -39,7 +39,7 @@ pipeline {
     stage('Publish frontend Image') {
       steps {
         script {
-          withDockerRegistry(credentialsId: 'efrei2023-token') {
+          withDockerRegistry(credentialsId: 'ab52a962-60e1-493d-b0ac-8e909378f046') {
             frontendImage.push()
           }
         }
