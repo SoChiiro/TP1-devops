@@ -5,11 +5,6 @@ pipeline {
   agent any
 
   stages {
-    stage('Cloning Git') {
-      steps {
-        git credentialsId: 'SoChiiro', url: 'https://github.com/SoChiiro/TP1-devops'
-      }
-    }
     stage('Building backend image') {
       steps {
         script {
