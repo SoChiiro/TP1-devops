@@ -9,43 +9,43 @@ pipeline {
       stage('Building backend image') {
         steps {
           script {
-              sh "docker build -t efrei2023/backend-mariotte:1999 ./TP-1/backend/"
+              bat "docker build -t efrei2023/backend-mariotte:1999 ./TP-1/backend/"
           }
         }
       }
       stage('Building frontend image') {
         steps {
           script {
-              sh "docker build -t efrei2023/frontend-mariotte:1999 ./TP-1/frontend/"
+              bat "docker build -t efrei2023/frontend-mariotte:1999 ./TP-1/frontend/"
           }
         }
       }
       stage('Pushing backend image') {
         steps {
           script {
-            sh "docker push efrei2023/backend-mariotte:1999"
+            bat "docker push efrei2023/backend-mariotte:1999"
           }
         }
       }
       stage('Pushing frontend image') {
         steps {
           script {
-            sh "docker push efrei2023/frontend-mariotte:1999"
+            bat "docker push efrei2023/frontend-mariotte:1999"
           }
         }
       }
       stage('Deploy backend container') {
         steps {
-          sh "docker stop backend || true"
-          sh "docker rm backend || true"
-          sh "docker run -d --net=efrei -e POSTGRES_PASSWORD=postgres --name backend mariotte/backend-mariotte:1999"
+          bat "docker stop backend || true"
+          bat "docker rm backend || true"
+          bat "docker run -d --net=efrei -e POSTGRES_PASSWORD=postgres --name backend mariotte/backend-mariotte:1999"
         }
       }
       stage('Deploy frontend container') {
         steps {
-          sh "docker stop frontend || true"
-          sh "docker rm frontend || true"
-          sh "docker run -d --net=efrei -e POSTGRES_PASSWORD=postgres --name frontend -p 8081:80 mariotte/frontend-mariotte:1999" 
+          bat "docker stop frontend || true"
+          bat "docker rm frontend || true"
+          bat "docker run -d --net=efrei -e POSTGRES_PASSWORD=postgres --name frontend -p 8081:80 mariotte/frontend-mariotte:1999" 
         }
       }
     }
