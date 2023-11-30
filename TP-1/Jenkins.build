@@ -1,60 +1,52 @@
-def backendImage = ''
-def frontendImage = ''
 pipeline {
+    agent any
 
-  agent any
+    environment {
+      DOCKERHUB_CREDENTIALS = credentials('docker')
+    }
 
-  stages {
-    stage('Building backend image') {
-      steps {
-        script {
-          dir('TP-1/backend') {
-            backendImage = docker.build("efrei2023/backend:1")
-
+    stages {
+      stage('Building backend image') {
+        steps {
+          script {
+              sh "docker build -t sochiiro/backend-mariotte:1999 ./TP-1/backend/"
           }
         }
       }
-    }
-    stage('Publish backend Image') {
-      steps {
-        script {
-          withDockerRegistry(credentialsId: 'ab52a962-60e1-493d-b0ac-8e909378f046') {
-            backendImage.push()
-          }
-
-        }
-      }
-    }
-
-    stage('Building frontend image') {
-      steps {
-        script {
-          dir('TP-1/frontend') {
-            frontendImage = docker.build("efrei2023/frontend:1")
+      stage('Building frontend image') {
+        steps {
+          script {
+              sh "docker build -t sochiiro/frontend-mariotte:1999 ./TP-1/frontend/"
           }
         }
       }
-    }
-
-    stage('Publish frontend Image') {
-      steps {
-        script {
-          withDockerRegistry(credentialsId: 'ab52a962-60e1-493d-b0ac-8e909378f046') {
-            frontendImage.push()
+      stage('Pushing backend image') {
+        steps {
+          script {
+            sh "docker push sochiiro/backend-mariotte:1999"
           }
         }
       }
-    }
-
-    stage('Deploy backend container') {
-      steps {
-        echo "Run  backend container "
+      stage('Pushing frontend image') {
+        steps {
+          script {
+            sh "docker push sochiiro/frontend-mariotte:1999"
+          }
+        }
+      }
+      stage('Deploy backend container') {
+        steps {
+          sh "docker stop backend || true"
+          sh "docker rm backend || true"
+          sh "docker run -d --net=efrei -e POSTGRES_PASSWORD=postgres --name backend mariotte/backend-mariotte:1999"
+        }
+      }
+      stage('Deploy frontend container') {
+        steps {
+          sh "docker stop frontend || true"
+          sh "docker rm frontend || true"
+          sh "docker run -d --net=efrei -e POSTGRES_PASSWORD=postgres --name frontend -p 8081:80 mariotte/frontend-mariotte:1999" 
+        }
       }
     }
-    stage('Deploy frontend container') {
-      steps {
-        echo "Run  backend container "
-      }
-    }
-  }
 }
