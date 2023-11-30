@@ -1,0 +1,59 @@
+def backendImage = ''
+def frontendImage = ''
+
+pipeline {
+  agent {
+    label 'jenkins-slave'
+  }
+
+  stages {
+    stage('Cloning Git') {
+      steps {
+        git credentialsId: 'GitHubEfrei', url: 'https://github.com/efrei2023/practical-exercises.git'
+      }
+    }
+    stage('Building backend image') {
+      steps {
+        script {
+              sh "docker build -t backend-mariotte:1999 ."
+              sh "docker run -d --net=efrei -e POSTGRES_PASSWORD=postgres --name backend backend-mariotte:19999"
+              sh "docker logs backend"
+        }
+      }
+    }
+    stage('Publish backend Image') {
+      steps {
+        script {
+         
+        }
+      }
+    }
+
+    stage('Building frontend image') {
+      steps {
+        script {
+        
+        }
+      }
+    }
+
+    stage('Publish frontend Image') {
+      steps {
+        script {
+          
+        }
+      }
+    }
+
+    stage('Deploy backend container') {
+      steps {
+       
+      }
+    }
+    stage('Deploy frontend container') {
+      steps {
+      
+      }
+    }
+  }
+}
