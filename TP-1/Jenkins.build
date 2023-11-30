@@ -8,32 +8,32 @@ pipeline {
     stage('Building backend image') {
       steps {
         script {
-              sh "docker build -t backend-mariotte:1999 ./TP-1/backend/"
+              bat "docker build -t backend-mariotte:1999 ./TP-1/backend/"
             }
           }
         }
     stage('Building frontend image') {
       steps {
         script {
-              sh "docker build -t frontend-mariotte:1999 ./TP-1/frontend/"
+              bat "docker build -t frontend-mariotte:1999 ./TP-1/frontend/"
             }
           }
     }
     stage('Deploy backend container') {
       steps {
         script {
-              sh "docker stop backend || true"
-              sh "docker rm backend || true"
-              sh "docker run -d --net=efrei -e POSTGRES_PASSWORD=postgres --name backend backend-mariotte:19999"
+              bat "docker stop backend || true"
+              bat "docker rm backend || true"
+              bat "docker run -d --net=efrei -e POSTGRES_PASSWORD=postgres --name backend backend-mariotte:19999"
             }
           }
     }
     stage('Deploy front container') {
       steps {
         script {
-              sh "docker stop frontend || true"
-              sh "docker rm frontend || true"
-              sh "docker run -d --net=efrei  -p 8081:80 -e POSTGRES_PASSWORD=postgres --name frontend frontend-mariotte:1999"
+              bat "docker stop frontend || true"
+              bat "docker rm frontend || true"
+              bat "docker run -d --net=efrei  -p 8081:80 -e POSTGRES_PASSWORD=postgres --name frontend frontend-mariotte:1999"
             }
           }
     }
