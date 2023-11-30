@@ -1,41 +1,67 @@
 def backendImage = ''
 def frontendImage = ''
-
 pipeline {
-  agent any
+
+  agent {
+    label 'jenkins-slave'
+  }
 
   stages {
+    stage('Cloning Git') {
+      steps {
+        git branch: 'main' credentialsId: 'SoChiiro', url: 'https://github.com/SoChiiro/TP1-devops'
+      }
+    }
     stage('Building backend image') {
       steps {
         script {
-              sh "docker build -t backend-mariotte:1999 ./TP-1/backend/"
-            }
+          dir('TP-1/backend') {
+            backendImage = docker.build("efrei2023/backend:1")
+
           }
         }
+      }
+    }
+    stage('Publish backend Image') {
+      steps {
+        script {
+          withDockerRegistry(credentialsId: 'DockerHubEfrei') {
+            backendImage.push()
+          }
+
+        }
+      }
+    }
+
     stage('Building frontend image') {
       steps {
         script {
-              sh "docker build -t frontend-mariotte:1999 ./TP-1/frontend/"
-            }
+          dir('TP-1/frontend') {
+            frontendImage = docker.build("efrei2023/frontend:1")
           }
+        }
+      }
     }
+
+    stage('Publish frontend Image') {
+      steps {
+        script {
+          withDockerRegistry(credentialsId: 'ab52a962-60e1-493d-b0ac-8e909378f046') {
+            frontendImage.push()
+          }
+        }
+      }
+    }
+
     stage('Deploy backend container') {
       steps {
-        script {
-              sh "docker stop backend || true"
-              sh "docker rm backend || true"
-              sh "docker run -d --net=efrei -e POSTGRES_PASSWORD=postgres --name backend backend-mariotte:19999"
-            }
-          }
+        echo "Run  backend conatiner "
+      }
     }
-    stage('Deploy front container') {
+    stage('Deploy frontend container') {
       steps {
-        script {
-              sh "docker stop frontend || true"
-              sh "docker rm frontend || true"
-              sh "docker run -d --net=efrei  -p 8081:80 -e POSTGRES_PASSWORD=postgres --name frontend frontend-mariotte:1999"
-            }
-          }
+        echo "Run  backend container "
+      }
     }
-    }
+  }
 }
