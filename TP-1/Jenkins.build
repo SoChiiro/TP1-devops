@@ -20,7 +20,7 @@ pipeline {
     stage('Publish backend Image') {
       steps {
         script {
-          withDockerRegistry(credentialsId: 'DockerHubEfrei') {
+          withDockerRegistry(credentialsId: 'ab52a962-60e1-493d-b0ac-8e909378f046') {
             backendImage.push()
           }
 
@@ -50,7 +50,7 @@ pipeline {
 
     stage('Deploy backend container') {
       steps {
-        echo "Run  backend conatiner "
+        echo "Run  backend container "
       }
     }
     stage('Deploy frontend container') {
